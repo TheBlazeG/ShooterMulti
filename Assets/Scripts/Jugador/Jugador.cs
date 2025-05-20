@@ -33,6 +33,9 @@ public class Jugador : NetworkBehaviour
     [Header("Weapons")]
     public Transform transformCannon;
 
+    [SyncVar(hook =nameof(OnKillChanged))]
+    private int kills = 0;
+
     [Header("HP"), SyncVar(hook = nameof(HealthChanged))]
     private int hp = 5;
     private int maxHp;
@@ -54,6 +57,8 @@ public class Jugador : NetworkBehaviour
     [SyncVar(hook =nameof(NameChanged))]
     private string username;
 
+    [Header("Team"), SyncVar(hook = nameof(OnChangeTeam))]
+    private Teams myTeam = Teams.None;
 
     #endregion
     #region Unity
@@ -105,12 +110,36 @@ public class Jugador : NetworkBehaviour
         {
             if (hit.collider.gameObject.TryGetComponent<Jugador>(out Jugador hitPlayer)==true)
             {
-                Debug.Log("hice poopoo a: " + hitPlayer.gameObject.name);
+                
 
-                hitPlayer.TakeDamage(1);
-
+                if(hitPlayer.TakeDamage(1,myTeam))
+                {
+                    kills++;
+                }
             }
         }
+    }
+
+    private void OnKillChanged(int oldKills, int newKills)
+    {
+        Debug.Log("ETC...");
+    }
+
+    [Server]
+    public bool TakeDamage(int amount,Teams elTeam)
+    {
+        if (hp<=0|| elTeam ==myTeam)
+        {
+            hp = 0;
+            return false;
+        }
+        hp -= amount;
+        if (hp<=0)
+        {
+            KillPlayer();
+            return true;
+        }
+        return false;
     }
     #endregion
     #region Hats
@@ -148,20 +177,7 @@ public class Jugador : NetworkBehaviour
     {
         healthBar.localScale = new Vector3(healthBar.localScale.x, (float)newHealth / maxHp, healthBar.localScale.z);
     }
-    [Server]
-    public void TakeDamage(int amount)
-    {
-        if (hp<=0)
-        {
-            hp = 0;
-            return;
-        }
-        hp -= amount;
-        if (hp<=0)
-        {
-            KillPlayer();
-        }
-    }
+   
 
     [Server]
     private void KillPlayer()
@@ -265,6 +281,15 @@ transform.localScale = new Vector3(1, 0.3f, 1);
     }
     #endregion
 
+    #region Mirror
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        CommandSetTeam();
+    }
+
+    #endregion
+
     [Command]
     private void CommandChangeName(string myName)
     {
@@ -284,5 +309,20 @@ transform.localScale = new Vector3(1, 0.3f, 1);
         hp = maxHp;
     }
 
-   
+    [Server]
+    private void CommandSetTeam()
+    {
+        myTeam = TeamManager.singleton.GetBalancedTeam();
+        TeamManager.singleton.RegisterPlayer(this, myTeam);
+    }
+
+    private void OnChangeTeam(Teams oldTeam, Teams newTeam)
+    {
+        SetLook(newTeam);
+    }
+    private void SetLook(Teams elTeam)
+    {
+        Debug.Log("Soy " + elTeam.ToString() + " gurl");
+    }
+
     }
