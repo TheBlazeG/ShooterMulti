@@ -33,8 +33,9 @@ public class Jugador : NetworkBehaviour
     [Header("Weapons")]
     public Transform transformCannon;
 
+
     [SyncVar(hook =nameof(OnKillChanged))]
-    private int kills = 0;
+    public int kills = 0;
 
     [Header("HP"), SyncVar(hook = nameof(HealthChanged))]
     private int hp = 5;
@@ -266,7 +267,7 @@ transform.localScale = new Vector3(1, 0.3f, 1);
         SpawnHatCommand(_usernamePanel.HatIndexRequest());
         CommandChangeName(_usernamePanel.PideUsuario());
         _usernamePanel.gameObject.SetActive(false);
-       
+        CommandRegisterPlayer();
 
     }
     public override void OnStartAuthority()
@@ -289,6 +290,8 @@ transform.localScale = new Vector3(1, 0.3f, 1);
     }
 
     #endregion
+
+    
 
     [Command]
     private void CommandChangeName(string myName)
@@ -323,6 +326,12 @@ transform.localScale = new Vector3(1, 0.3f, 1);
     private void SetLook(Teams elTeam)
     {
         Debug.Log("Soy " + elTeam.ToString() + " gurl");
+    }
+
+    [Command]
+    private void CommandRegisterPlayer()
+    {
+        ScoreManager.singleton.RegisterPlayer(this);
     }
 
     }
