@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 public class Jugador : NetworkBehaviour
 {
@@ -268,6 +269,7 @@ transform.localScale = new Vector3(1, 0.3f, 1);
         CommandChangeName(_usernamePanel.PideUsuario());
         _usernamePanel.gameObject.SetActive(false);
         CommandRegisterPlayer();
+        uiPanel = FindFirstObjectByType<UiManager>(FindObjectsInactive.Include).gameObject;
 
     }
     public override void OnStartAuthority()
@@ -291,6 +293,8 @@ transform.localScale = new Vector3(1, 0.3f, 1);
 
     #endregion
 
+    [Header("UI")]
+    public GameObject uiPanel;
     
 
     [Command]
@@ -332,6 +336,40 @@ transform.localScale = new Vector3(1, 0.3f, 1);
     private void CommandRegisterPlayer()
     {
         ScoreManager.singleton.RegisterPlayer(this);
+    }
+
+    public void ShowKills(InputAction.CallbackContext context)
+    {
+        if (!isLocalPlayer) return;
+        if (context.started)
+        {
+            Debug.Log("started");
+            uiPanel.SetActive(true);
+            CommandGetKills();
+        }
+        else if (context.canceled)
+        {
+            uiPanel.SetActive(false);
+            Debug.Log("canceled");
+        }
+    }
+
+    [Command]
+    private void CommandGetKills()
+    {
+        string content = "";
+        var info = ScoreManager.singleton.GetSortedScore();
+        foreach (var item in info)
+        {
+            content = content + "\u2022" + item.name + " -- " + item.kills.ToString() + "<br>";
+        }
+        TargetShowKills(content);
+    }
+
+    [TargetRpc]
+    private void TargetShowKills(string infoClear)
+    {
+        uiPanel.GetComponent<UiManager>().ShowKills(infoClear);
     }
 
     }

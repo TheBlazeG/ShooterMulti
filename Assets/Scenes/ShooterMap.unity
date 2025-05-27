@@ -481,13 +481,14 @@ GameObject:
   - component: {fileID: 203128674}
   - component: {fileID: 203128676}
   - component: {fileID: 203128675}
+  - component: {fileID: 203128677}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &203128674
 RectTransform:
   m_ObjectHideFlags: 0
@@ -546,6 +547,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203128673}
   m_CullTransparentMesh: 1
+--- !u!114 &203128677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203128673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27ae3c0e2e441fd4db112972f71b0c29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killText: {fileID: 1829173387}
 --- !u!1 &206925036
 GameObject:
   m_ObjectHideFlags: 0
@@ -3889,6 +3903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27ae3c0e2e441fd4db112972f71b0c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  killText: {fileID: 0}
 --- !u!114 &1829173387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3939,7 +3954,7 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -3954,7 +3969,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
