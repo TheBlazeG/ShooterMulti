@@ -178,6 +178,11 @@ public class Jugador : NetworkBehaviour
     private void HealthChanged(int oldHealth , int newHealth)
     {
         healthBar.localScale = new Vector3(healthBar.localScale.x, (float)newHealth / maxHp, healthBar.localScale.z);
+        if (isLocalPlayer)
+        {
+            float foo= (float)newHealth/(float)maxHp;
+            playerHUD.SetHP(foo);
+        }
     }
    
 
@@ -185,6 +190,7 @@ public class Jugador : NetworkBehaviour
     private void KillPlayer()
     {
         isAlive = false;
+        
     }
 
     private void AliveHasChanged(bool oldBool, bool newBool)
@@ -200,6 +206,10 @@ transform.localScale = new Vector3(1, 0.3f, 1);
                 return;
             }
             Invoke("CommandRespawn", respawnTime);
+            
+            
+                playerHUD.gameObject.SetActive(false);
+            
         }
         else
         {
@@ -212,9 +222,10 @@ transform.localScale = new Vector3(1, 0.3f, 1);
             }
             gameObject.GetComponent<PlayerInput>().enabled = true;
             transformCam.gameObject.SetActive(true);
+            playerHUD.gameObject.SetActive(true);
 
         }
-        
+
     }
     #endregion
     #region Input
@@ -270,6 +281,8 @@ transform.localScale = new Vector3(1, 0.3f, 1);
         _usernamePanel.gameObject.SetActive(false);
         CommandRegisterPlayer();
         uiPanel = FindFirstObjectByType<UiManager>(FindObjectsInactive.Include).gameObject;
+        playerHUD = FindAnyObjectByType<PlayerHUD>(FindObjectsInactive.Include);
+        playerHUD.gameObject.SetActive(true);
 
     }
     public override void OnStartAuthority()
@@ -281,6 +294,10 @@ transform.localScale = new Vector3(1, 0.3f, 1);
         transformCam.gameObject.SetActive(true);
         nameTagObject.gameObject.SetActive(false);
         healthBar.gameObject.SetActive(false);
+        foreach (var part in noShowObjects)
+        {
+           part.SetActive(false);
+        }
     }
     #endregion
 
@@ -295,7 +312,10 @@ transform.localScale = new Vector3(1, 0.3f, 1);
 
     [Header("UI")]
     public GameObject uiPanel;
-    
+    public PlayerHUD playerHUD;
+
+    [Header("Body")]
+    public GameObject[] noShowObjects;
 
     [Command]
     private void CommandChangeName(string myName)
@@ -330,6 +350,16 @@ transform.localScale = new Vector3(1, 0.3f, 1);
     private void SetLook(Teams elTeam)
     {
         Debug.Log("Soy " + elTeam.ToString() + " gurl");
+        var mat = noShowObjects[1].GetComponent<SkinnedMeshRenderer>().material;
+        mat.SetFloat("_Toggle", elTeam == Teams.Alpha ? 0 : 1);
+
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        var miMat = transformCam.GetChild(0).GetComponent<MeshRenderer>().material;
+        miMat.SetFloat("_Toggle", elTeam == Teams.Alpha ? 0 : 1);
+        
     }
 
     [Command]
