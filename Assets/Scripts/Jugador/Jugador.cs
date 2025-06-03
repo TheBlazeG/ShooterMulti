@@ -11,6 +11,7 @@ public class Jugador : NetworkBehaviour
     #region Parametros
     private Rigidbody _rb;
     private InfoJugador _usernamePanel;
+    public Animator animator;
 
     [Header("Movimiento")]
     private Vector3 _moveDirection = new Vector3();
@@ -90,7 +91,7 @@ public class Jugador : NetworkBehaviour
         {
             _rb.AddForce(Vector3.down * gravityNormal, ForceMode.Acceleration);
         }
-
+        animator.SetFloat("Velocity",horizontalVelocity.magnitude);
     }
     void Update()
     {
@@ -182,7 +183,12 @@ public class Jugador : NetworkBehaviour
         {
             float foo= (float)newHealth/(float)maxHp;
             playerHUD.SetHP(foo);
+            
         }
+        if (oldHealth>newHealth)
+            {
+                animator.SetTrigger("Hit");
+            }
     }
    
 
@@ -206,7 +212,7 @@ transform.localScale = new Vector3(1, 0.3f, 1);
                 return;
             }
             Invoke("CommandRespawn", respawnTime);
-            
+            animator.SetBool("Death",!newBool);
             
                 playerHUD.gameObject.SetActive(false);
             
@@ -223,7 +229,7 @@ transform.localScale = new Vector3(1, 0.3f, 1);
             gameObject.GetComponent<PlayerInput>().enabled = true;
             transformCam.gameObject.SetActive(true);
             playerHUD.gameObject.SetActive(true);
-
+            animator.SetBool("Death", !newBool);
         }
 
     }
