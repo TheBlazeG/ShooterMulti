@@ -190,7 +190,12 @@ public class Jugador : NetworkBehaviour
                 animator.SetTrigger("Hit");
             }
     }
-   
+
+    [Server]
+    public void IncreaseHealth(int amount)
+    {
+        hp = (hp + amount) > maxHp ? maxHp : hp + amount;
+    }
 
     [Server]
     private void KillPlayer()
