@@ -48,7 +48,7 @@ public class PowerupSpawner : NetworkBehaviour
 	public IEnumerator CollectPowerUp()
 	{
 
-		var foo = spawned.GetComponent<Health>();
+		var foo = spawned.GetComponent<APickUp>();
 		foo.isActive = false;
 		yield return new WaitForSeconds(spawnTime);
 		foo.isActive = true;
