@@ -33,7 +33,7 @@ public class PowerupSpawner : NetworkBehaviour
 	private void CmdSpawn()
 	{
         spawned = Instantiate(powerUps[(int)powerType], transform.position, Quaternion.identity);
-        spawned.GetComponent<Health>().Initialize(this);
+        spawned.GetComponent<APickUp>().Initialize(this);
         PositionPowerup(spawned, transform.position);
         NetworkServer.Spawn(spawned);
     }

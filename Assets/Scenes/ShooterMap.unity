@@ -3757,6 +3757,7 @@ MonoBehaviour:
   - {fileID: 9150722292404687070, guid: ebaeb2eed2a67334995eaf9d872f657a, type: 3}
   - {fileID: 8096588387214297393, guid: 15c3ec6854917c44daa9f04401d1503c, type: 3}
   - {fileID: 8131122863937041676, guid: bd0634515a3a37c4290e6b90c205dd2d, type: 3}
+  - {fileID: 8462752702333895013, guid: 67aec34e924b6f74f82b0f99671cde1f, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -5097,10 +5098,10 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  powerType: 0
+  powerType: 1
   powerUps:
   - {fileID: 8131122863937041676, guid: bd0634515a3a37c4290e6b90c205dd2d, type: 3}
-  - {fileID: 8131122863937041676, guid: bd0634515a3a37c4290e6b90c205dd2d, type: 3}
+  - {fileID: 8462752702333895013, guid: 67aec34e924b6f74f82b0f99671cde1f, type: 3}
   spawnTime: 5
 --- !u!4 &2043536203
 Transform:

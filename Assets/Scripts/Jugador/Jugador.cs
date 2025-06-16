@@ -106,6 +106,18 @@ public class Jugador : NetworkBehaviour
     }
     #endregion
     #region PewPew
+
+    [SyncVar(hook = (nameof(WeaponChanged)))]
+    public WeaponData currentWeapon;
+    public GameObject[] weapons;
+    
+
+    public void WeaponChanged(WeaponData oldData, WeaponData newData)
+    {
+        weapons[oldData.index].SetActive(false);
+        weapons[newData.index].SetActive(true);
+    }
+
     [Command]
     private void CommandShoot(Vector3 origin,Vector3 direction )
     {
