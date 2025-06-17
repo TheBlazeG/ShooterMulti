@@ -109,30 +109,51 @@ public class Jugador : NetworkBehaviour
 
     [SyncVar(hook = (nameof(WeaponChanged)))]
     public WeaponData currentWeapon;
+    public GameObject currentProjectile;
     public GameObject[] weapons;
+    public GameObject[] publicWeapon;
     
 
     public void WeaponChanged(WeaponData oldData, WeaponData newData)
     {
+        if (isLocalPlayer)
+        {
         weapons[oldData.index].SetActive(false);
         weapons[newData.index].SetActive(true);
+        }
+        else
+        {
+            publicWeapon[oldData.index].SetActive(false);
+            publicWeapon[newData.index].SetActive(true);
+
+        }
     }
 
     [Command]
     private void CommandShoot(Vector3 origin,Vector3 direction )
     {
-        if (Physics.Raycast(origin,direction, out RaycastHit hit, 100f))
+        if (currentWeapon.hitScan==true)
         {
-            if (hit.collider.gameObject.TryGetComponent<Jugador>(out Jugador hitPlayer)==true)
+        
+            if (Physics.Raycast(origin,direction, out RaycastHit hit, 100f))
             {
+                if (hit.collider.gameObject.TryGetComponent<Jugador>(out Jugador hitPlayer)==true)
+                {
                 
 
-                if(hitPlayer.TakeDamage(1,myTeam))
-                {
+                    if(hitPlayer.TakeDamage(1,myTeam))
+                    {
                     kills++;
+                    }
                 }
             }
         }
+        else
+        {
+          GameObject bullet =  Instantiate(currentProjectile, origin, Quaternion.LookRotation(direction));
+            bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * 20, ForceMode.Impulse);
+        }
+        
     }
 
     private void OnKillChanged(int oldKills, int newKills)

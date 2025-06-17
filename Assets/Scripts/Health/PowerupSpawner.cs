@@ -32,9 +32,10 @@ public class PowerupSpawner : NetworkBehaviour
 	[Server]
 	private void CmdSpawn()
 	{
-        spawned = Instantiate(powerUps[(int)powerType], transform.position, Quaternion.identity);
+		var pu = powerUps[(int)powerType];
+
+        spawned = Instantiate(pu,transform.position+ pu.transform.position, pu.transform.rotation);
         spawned.GetComponent<APickUp>().Initialize(this);
-        PositionPowerup(spawned, transform.position);
         NetworkServer.Spawn(spawned);
     }
 

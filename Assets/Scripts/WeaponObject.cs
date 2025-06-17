@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Weapon",menuName = "ScriptableObjects/Weapon",order = 0)]
 public class WeaponObject : ScriptableObject
@@ -7,13 +8,15 @@ public class WeaponObject : ScriptableObject
     public int index;
     public bool hitScan;
     public int damage = 1;
+    public GameObject projectile;
 
-    public WeaponData ToData()
+    public (WeaponData data, GameObject projectile) ToData()
     {
-        return new WeaponData(usesAmmo, ammo, index, hitScan, damage);
+        return (new WeaponData(usesAmmo, ammo, index, hitScan, damage), projectile);
     }
 }
 
+[Serializable]
 public struct WeaponData
 {
     public bool usesAmmo;
