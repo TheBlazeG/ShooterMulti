@@ -17,7 +17,7 @@ public class ABullet : NetworkBehaviour
 	public Jugador owner;
 	public Teams team;
 
-	public virtual void Initialize(Jugador player, Teams team)
+	public virtual void Initialize(Jugador player, Teams teamo)
 	{
 		Destroy(gameObject, lifetime);
 		if (rb!=null)
@@ -32,7 +32,9 @@ public class ABullet : NetworkBehaviour
 			}
 			Debug.LogAssertion("Forgot Rigidbody :p");
 		}
-	}
+
+        team = teamo;
+    }
 
 	public virtual void HasHit(Collision col)
 	{

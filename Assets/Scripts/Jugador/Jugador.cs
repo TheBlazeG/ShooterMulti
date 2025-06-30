@@ -112,6 +112,7 @@ public class Jugador : NetworkBehaviour
     public GameObject currentProjectile;
     public GameObject[] weapons;
     public GameObject[] publicWeapon;
+    public GameObject particles;
     
 
     public void WeaponChanged(WeaponData oldData, WeaponData newData)
@@ -129,14 +130,22 @@ public class Jugador : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    private void RPCSpawnParticles(Vector3 point, Vector3 direction)
+    {
+        Instantiate(particles, point, Quaternion.LookRotation(direction));
+    }
+
     [Command]
     private void CommandShoot(Vector3 origin,Vector3 direction )
     {
+        RPCSpawnParticles(origin,direction);
         if (currentWeapon.hitScan==true)
         {
         
             if (Physics.Raycast(origin,direction, out RaycastHit hit, 100f))
             {
+                RPCSpawnParticles(hit.point,-direction);
                 if (hit.collider.gameObject.TryGetComponent<Jugador>(out Jugador hitPlayer)==true)
                 {
                 
@@ -151,7 +160,8 @@ public class Jugador : NetworkBehaviour
         else
         {
           GameObject bullet =  Instantiate(currentProjectile, origin, Quaternion.LookRotation(direction));
-            bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * 20, ForceMode.Impulse);
+            bullet.GetComponent<ABullet>().Initialize(this,myTeam);
+            NetworkServer.Spawn(bullet);
         }
         
     }
@@ -164,11 +174,10 @@ public class Jugador : NetworkBehaviour
     [Server]
     public bool TakeDamage(int amount,Teams elTeam)
     {
-        if (hp<=0|| elTeam ==myTeam)
+        if (hp <= 0 || elTeam == myTeam)
         {
-            hp = 0;
-            return false;
-        }
+            return false;}
+        
         hp -= amount;
         if (hp<=0)
         {
