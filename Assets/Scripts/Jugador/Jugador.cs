@@ -216,6 +216,17 @@ public class Jugador : NetworkBehaviour
 
     #endregion
 
+    #region Effects
+
+    [TargetRpc]
+    public void GitPushed(Vector3 where, float force,float radius)
+    {
+        _rb.AddExplosionForce(force,where,radius);
+        Debug.Log("Me explotaron desde "+ where);
+    }
+    
+
+    #endregion
 
     #region HP
     private void HealthChanged(int oldHealth , int newHealth)

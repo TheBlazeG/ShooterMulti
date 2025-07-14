@@ -17,4 +17,4 @@ MonoBehaviour:
   index: 1
   hitScan: 0
   damage: 1
-  projectile: {fileID: 2586036764318765164, guid: 96536ff9fcecbbf438fe32ce52e2e6ab, type: 3}
+  projectile: {fileID: 2586036764318765164, guid: ee8146eaeb475d246adb57e2481b07cc, type: 3}

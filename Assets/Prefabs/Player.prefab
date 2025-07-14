@@ -1335,6 +1335,7 @@ MonoBehaviour:
   publicWeapon:
   - {fileID: 505976611172963230}
   - {fileID: 7056993451248621648}
+  particles: {fileID: 8292583345314806587, guid: d398d44d6b2917949b267c43b1f0fe2e, type: 3}
   uiPanel: {fileID: 0}
   playerHUD: {fileID: 0}
   noShowObjects:
